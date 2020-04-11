@@ -1,0 +1,124 @@
+{
+	"id": "d9f97371-ebf6-456e-8e48-dd96e95b4e2b",
+	"values": [
+		{
+			"key": "expectedName",
+			"value": "equip 1",
+			"enabled": false
+		},
+		{
+			"key": "taskId",
+			"value": null,
+			"enabled": false
+		},
+		{
+			"key": "pageNumberE",
+			"value": "1",
+			"enabled": true
+		},
+		{
+			"key": "pageSizeE",
+			"value": "1000",
+			"enabled": true
+		},
+		{
+			"key": "accountId",
+			"value": 95,
+			"enabled": true
+		},
+		{
+			"key": "chargedeptID",
+			"value": 9,
+			"enabled": true
+		},
+		{
+			"key": "categoryId",
+			"value": "c0540029-8951-4203-9b2d-a2063b499b8a",
+			"enabled": true
+		},
+		{
+			"key": "NoOfCategoryFound",
+			"value": 1,
+			"enabled": true
+		},
+		{
+			"key": "nameEquipment",
+			"value": "2020-04-08T23:04:28.314Z",
+			"enabled": true
+		},
+		{
+			"key": "equipmentCode",
+			"value": "codeNameEquip12020-04-08T23:18:15.995Z",
+			"enabled": true
+		},
+		{
+			"key": "manufactureEquipment",
+			"value": null,
+			"enabled": true
+		},
+		{
+			"key": "serialNoEquipment",
+			"value": null,
+			"enabled": true
+		},
+		{
+			"key": "barcodeEquipment",
+			"value": null,
+			"enabled": true
+		},
+		{
+			"key": "NoOfEquipmentFound",
+			"value": 1,
+			"enabled": true
+		},
+		{
+			"key": "nameAccount",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "codeAccount",
+			"value": "749",
+			"enabled": true
+		},
+		{
+			"key": "descriptionChargedDept.",
+			"value": "A descriptive description",
+			"enabled": true
+		},
+		{
+			"key": "facilityChargedDept",
+			"value": "Some details about a facility",
+			"enabled": true
+		},
+		{
+			"key": "codeChargedDept",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "NoOfAccountsFound",
+			"value": 1,
+			"enabled": true
+		},
+		{
+			"key": "NoOfChargeDeptFound",
+			"value": 2,
+			"enabled": true
+		},
+		{
+			"key": "CategoryNameUnique",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "nameE",
+			"value": "$$%m",
+			"enabled": true
+		}
+	],
+	"name": "My Workspace Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2020-04-08T23:22:51.902Z",
+	"_postman_exported_using": "Postman/7.21.2"
+}

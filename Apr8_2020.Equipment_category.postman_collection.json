@@ -1,0 +1,2244 @@
+{
+	"info": {
+		"_postman_id": "f0e840cd-e56d-42b7-b986-aea26b0c6599",
+		"name": "Equipment_category",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Search Equipment Category",
+			"item": [
+				{
+					"name": "script to find and set category name (dynamic)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"",
+									"pm.test(\"save values in global variable\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var index=_.random(0, (jsonData.items.length-1));",
+									"",
+									"    var nameValue=jsonData.items[index].name;",
+									"    while(nameValue===null){",
+									"        index=_.random(0, (jsonData.items.length-1));",
+									"        nameValue=jsonData.items[index].name;",
+									"    }",
+									" ",
+									"    pm.globals.set(\"CategoryNameUnique\", nameValue);",
+									"}); ",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+								"exec": [
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{{pageSizeE}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search with an existing name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"pm.test(\"total no. of search result is above 0\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    pm.globals.set(\"NoOfCategoryFound\", totalRecord);",
+									"    pm.expect(totalRecord).to.be.above(0);",
+									"}); ",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "586cd82c-2466-4287-bfdf-2a27f69e4d76",
+								"exec": [
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}&q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{{pageSizeE}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search with equipment category with an existing name uppercase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"pm.test(\"total no. of result is same as without case sensitivity\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    pm.expect(totalRecord).to.be.equal(pm.globals.get(\"NoOfCategoryFound\"));",
+									"}); ",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e4babafc-83b8-4076-9509-3b4ccecdf99e",
+								"exec": [
+									"let concatString = pm.globals.get(\"CategoryNameUnique\").toUpperCase();",
+									"pm.globals.set(\"CategoryNameUnique\", concatString);",
+									"",
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{pageSize}}=1000&pageNumber={{pageNumberE}}&q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "{{pageSize}}",
+									"value": "1000"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search with equipment category with an existing name lowercase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"pm.test(\"total no. of result is same as without case sensitivity\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    pm.expect(totalRecord).to.be.equal(pm.globals.get(\"NoOfCategoryFound\"));",
+									"}); ",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e4babafc-83b8-4076-9509-3b4ccecdf99e",
+								"exec": [
+									"let concatString = pm.globals.get(\"CategoryNameUnique\").toLowerCase();",
+									"pm.globals.set(\"CategoryNameUnique\", concatString);",
+									"",
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{pageSize}}=1000&pageNumber={{pageNumberE}}&q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "{{pageSize}}",
+									"value": "1000"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search with equipment category with substring (name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"pm.test(\"total no. of substring record is equal or more  than actual found\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    pm.expect(totalRecord).to.be.at.least(pm.globals.get(\"NoOfCategoryFound\"));",
+									"",
+									"}); ",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fcd2ded5-636f-4919-a7b3-2a3c9a83681e",
+								"exec": [
+									"let maximumIndexNo=pm.globals.get(\"CategoryNameUnique\").length;",
+									"let randomLastIndexNo=_.random(1, maximumIndexNo);",
+									"",
+									"let subStringForCategory= pm.globals.get(\"CategoryNameUnique\").substr(0,randomLastIndexNo);",
+									"",
+									"pm.globals.set(\"CategoryNameUnique\", subStringForCategory);",
+									"",
+									"",
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{pageSize}}=1000&pageNumber={{pageNumberE}}&q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "{{pageSize}}",
+									"value": "1000"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search with equipment category with a non-existing name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "369809f6-e723-43d6-b8ca-1e34925f2b8e",
+								"exec": [
+									"const dateNow= new Date();",
+									"let stringDate= dateNow.toISOString();",
+									"let concatString = 'javascript'+stringDate;",
+									"pm.globals.set(\"CategoryNameUnique\", concatString);",
+									"",
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ec8a3965-c8b6-4d01-ba38-dd7812500bfb",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"total no. of record is 0\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    pm.expect(totalRecord).to.eql(0);",
+									"    pm.globals.set(\"CategoryNameUnique\", null);",
+									"",
+									"",
+									"}); ",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}&q={{CategoryNameUniqu}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSizeE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUniqu}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search equipment category with blank search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"pm.test(\"total no.  record is 0\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    var totalItems=jsonData.items.length;",
+									"    pm.expect(totalRecord).to.eql(totalItems);",
+									"",
+									"}); ",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fcd2ded5-636f-4919-a7b3-2a3c9a83681e",
+								"exec": [
+									"pm.globals.set(\"CategoryNameUnique\", \"\");",
+									"",
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}&q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{{pageSizeE}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								},
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Unique and mandatory category name",
+			"item": [
+				{
+					"name": "POST unique and mandatory name",
+					"item": [
+						{
+							"name": "post EquipmentCetegory exact same name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "191804fc-0323-4e12-b5f3-75cc9aba4393",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Status is Created\", function() {",
+											"    pm.response.to.have.status(\"Created\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\":\"{{CategoryNameUnique}}\"\n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post EquipmentCetegory with Case different same name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "191804fc-0323-4e12-b5f3-75cc9aba4393",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"body contains error : category name must be unique\", function() {",
+											"     pm.expect(pm.response.text()).to.include(\"name must be unique\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "a181ffef-8224-4015-b00c-7dc738669ed6",
+										"exec": [
+											"let upperCaseCategoryName= pm.globals.get(\"CategoryNameUnique\").toUpperCase();",
+											"pm.globals.set(\"CategoryNameUnique\", upperCaseCategoryName);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"{{CategoryNameUnique}}\"\n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET unique and mandatory name",
+					"item": [
+						{
+							"name": "get category list for post",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status is : OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"save category name in global variable (dynamic)\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var index=_.random(0, (jsonData.items.length-1))",
+											"    var nameValue=jsonData.items[index].name;",
+											"    console.log(nameValue);",
+											"    pm.globals.set(\"CategoryNameUnique\", nameValue);",
+											"    ",
+											"}); ",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{sortBy}}&{{pageSize}}&{{pageNumbe}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "{{sortBy}}",
+											"value": null
+										},
+										{
+											"key": "{{pageSize}}",
+											"value": null
+										},
+										{
+											"key": "{{pageNumbe}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get equipment  category with a name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "15cd96b1-16f2-4755-ad83-691b09355cc1",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status is OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"pm.test(\"total no. of record is more  than 0\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var totalRecord=jsonData.totalElements;",
+											"    pm.expect(totalRecord).to.be.above(0);",
+											"",
+											"}); ",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?q={{CategoryNameUnique}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{{CategoryNameUnique}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get equipment category with a non-existing name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "94d055b5-d110-46b7-9369-10d20947bd46",
+										"exec": [
+											"const dateNow= new Date();",
+											"let stringDate= dateNow.toISOString();",
+											"let concatString = 'javascript'+stringDate;",
+											"pm.globals.set(\"CategoryNameUnique\", concatString);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "78b67f31-06da-44b8-894b-1748b0f8c4de",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status code name has string : OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"total no. of record is 0\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var totalRecord=jsonData.totalElements;",
+											"    pm.expect(totalRecord).to.eql(0);",
+											"      pm.globals.set(\"CategoryNameUnique\", null);",
+											"",
+											"}); ",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?q={{CategoryNameUnique}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{{CategoryNameUnique}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get equipment with a blank name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b4367d71-6197-4d42-b5b1-2ae7763f0846",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status is OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"no. of search result for blank search = total no. of records\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var noOfSearchResult=jsonData.items.length;",
+											"    var totalRecord=jsonData.totalElements;",
+											"    pm.expect(totalRecord).to.eql(noOfSearchResult);",
+											"",
+											"}); ",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9144e672-fd6b-41ef-a0fc-66ed5d2577b6",
+										"exec": [
+											"",
+											"pm.globals.set(\"CategoryNameUnique\", \"\");",
+											"pm.globals.set(\"pageSizeE\", 1000 );",
+											"pm.globals.set(\"pageNumberE\", 1 );"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?name={{CategoryNameUnique}}&pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{CategoryNameUnique}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										},
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Equipment Category General",
+			"item": [
+				{
+					"name": "Obsolute",
+					"item": [
+						{
+							"name": "Match account name 1st and last",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "acefdcf6-4aae-4b44-8dce-d6c6aaf4bef4",
+										"exec": [
+											"pm.test(\"Check if content matches with database\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var lastIndex=jsonResponse.items.length-1;",
+											"        ",
+											"        pm.test(\"Account 1st code and last code matching\", function () {",
+											"        pm.expect(jsonResponse.items[0].name).to.eql(\"123\");",
+											"        pm.expect(jsonResponse.items[lastIndex].name).to.eql(\"Parminder Kaur\");",
+											"});",
+											"    ",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "611c8864-3fd5-47d9-b00b-bd50d274ab6a",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"1\");",
+											"pm.globals.set(\"pageSizeE\", \"1000\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get exceeding page limit",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "d14f95ef-1dbf-4aa3-814a-de5d1ac3584e",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"2\");",
+											"pm.globals.set(\"pageSizeE\", \"1000\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "95bc4582-4687-4665-8782-ff8eb65636e9",
+										"exec": [
+											"pm.test(\"Check if content matches with database\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var noOfItem=jsonResponse.items.length;",
+											"        pm.expect(noOfItem).to.eql(0);",
+											"",
+											"    ",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Fiix-Tenant-Id",
+										"type": "text",
+										"value": "20",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post EquipmentCetegory from csv",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "191804fc-0323-4e12-b5f3-75cc9aba4393",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Status code name has string : Created\", function() {",
+											"    pm.response.to.have.status(\"Created\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": {{nameV}}\n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post unsuccessful post EquipmentCategory Error message",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67a63323-1efb-4e84-8984-074231e27d11",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Status code name has string : error message\", function() {",
+											"    pm.expect(pm.response.text()).to.include(\"must be unique\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"{{CategoryNameUnique}}\"\n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET Equipment list with Category",
+					"item": [
+						{
+							"name": "get category list status check",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status is OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{sortBy}}&{{pageSize}}=1000&pageNumber={{pageNumberE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "{{sortBy}}",
+											"value": null
+										},
+										{
+											"key": "{{pageSize}}",
+											"value": "1000"
+										},
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get charge dept/ visible elements exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5d593ef1-2ac3-4cec-9c3d-4d3ac365c29d",
+										"exec": [
+											"pm.test(\"Check if name  fields exist\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        pm.expect(jsonResponse.items[0]).to.have.property('name');",
+											"        pm.expect(jsonResponse.items[0].name).to.be.a('string');",
+											"    }",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{sortBy}}&{{pageSize}}&{{pageNumbe}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "{{sortBy}}",
+											"value": null
+										},
+										{
+											"key": "{{pageSize}}",
+											"value": null
+										},
+										{
+											"key": "{{pageNumbe}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get Total no. of record",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "76028e95-8c05-4df5-afc8-85f908e1a79f",
+										"exec": [
+											"pm.test(\"Check if all the fields exist\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var itemsPerPage=jsonResponse.items.length",
+											"",
+											"        pm.test(\"total no. of records : maxumum record\", function() {",
+											"            pm.expect(jsonResponse.totalElements).to.eql(itemsPerPage);",
+											"        });",
+											"    }",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "bebee2f7-20d7-4c8d-acc2-e7169086ce58",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"1\");",
+											"pm.globals.set(\"pageSizeE\", \"1000\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get pagination for pageSize -1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6344bb15-f402-46f9-94c0-0ee0ef0dc8c8",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"1\");",
+											"pm.globals.set(\"pageSizeE\", \"-1\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "de6ef2c5-900b-4ae8-a92b-e3392b4423df",
+										"exec": [
+											"pm.test(\" when page size: -1, default page size of 10 kicks in\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var itemsPerPage=jsonResponse.pageSize;",
+											"        pm.expect(itemsPerPage).to.eql(10);",
+											"    ",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get pagination for pageNo -1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6344bb15-f402-46f9-94c0-0ee0ef0dc8c8",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"-1\");",
+											"pm.globals.set(\"pageSizeE\", \"10\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "de6ef2c5-900b-4ae8-a92b-e3392b4423df",
+										"exec": [
+											"pm.test(\" when page number: -1, default page number kicks in\", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var itemsPerPage=jsonResponse.pageNumber",
+											"        pm.expect(itemsPerPage).to.eql(1);",
+											"",
+											"    ",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get pagination for large page size",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c4fc19e1-cc7b-40d3-bd39-464d8407e951",
+										"exec": [
+											"pm.test(\"Boundry checkL when no max page size, all records show up correctly \", function() {",
+											"    if(pm.response.to.have.status(\"OK\")){",
+											"        var jsonResponse = pm.response.json();",
+											"        var totalRecordsInOnePage=jsonResponse.totalElements;",
+											"        var itemsPerPage=jsonResponse.items.length",
+											"        pm.expect(itemsPerPage).to.eql(totalRecordsInOnePage);",
+											"",
+											"    ",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ccd4c5a8-50e1-4c66-993b-3bb50f113558",
+										"exec": [
+											"pm.globals.set(\"pageNumberE\", \"1\");",
+											"pm.globals.set(\"pageSizeE\", \"1000\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Fiix-Tenant-Id",
+										"type": "text",
+										"value": "20",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageNumber={{pageNumberE}}&pageSize={{pageSizeE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "POST Equipment Category",
+					"item": [
+						{
+							"name": "script to find and set category name (dynamic)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+										"exec": [
+											"pm.test(\"Status code is 200\", function() {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Status is OK\", function() {",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"pm.test(\"save values in global variable\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var index=_.random(0, (jsonData.items.length-1));",
+											"",
+											"    var nameValue=jsonData.items[index].name;",
+											"    while(nameValue===null){",
+											"        index=_.random(0, (jsonData.items.length-1));",
+											"        nameValue=jsonData.items[index].name;",
+											"    }",
+											" ",
+											"    pm.globals.set(\"CategoryNameUnique\", nameValue);",
+											"}); ",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?{{sortBy}}&pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									],
+									"query": [
+										{
+											"key": "{{sortBy}}",
+											"value": null
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSizeE}}"
+										},
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumberE}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post EquipmentCetegory with empty tag",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "191804fc-0323-4e12-b5f3-75cc9aba4393",
+										"exec": [
+											"pm.test(\"Status code is 201 when body is empty\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post EquipmentCetegory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "191804fc-0323-4e12-b5f3-75cc9aba4393",
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Status code name has string : Created\", function() {",
+											"    pm.response.to.have.status(\"Created\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "45f57642-8c5d-4b59-8dbe-2b78222c4a11",
+										"exec": [
+											"const dateNow= new Date();",
+											"let stringDate= dateNow.toISOString();",
+											"let concatString = pm.globals.get(\"CategoryNameUnique\")+stringDate;",
+											"pm.globals.set(\"CategoryNameUnique\", concatString);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"{{CategoryNameUnique}}\"\n}"
+								},
+								"url": {
+									"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+									"protocol": "https",
+									"host": [
+										"equipment-mgmt-service",
+										"fiixcmms-ball",
+										"com"
+									],
+									"path": [
+										"equipment-categories"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Trim space",
+			"item": [
+				{
+					"name": "script to find and set category name (dynamic)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"",
+									"pm.test(\"save values in global variable\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var index=_.random(0, (jsonData.items.length-1));",
+									"",
+									"    var nameValue=jsonData.items[index].name;",
+									"    while(nameValue===null){",
+									"        index=_.random(0, (jsonData.items.length-1));",
+									"        nameValue=jsonData.items[index].name;",
+									"    }",
+									" ",
+									"    pm.globals.set(\"CategoryNameUnique\", nameValue);",
+									"}); ",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+								"exec": [
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?pageSize={{pageSizeE}}&pageNumber={{pageNumberE}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{{pageSizeE}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumberE}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1st unique post request with space in front",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cc1489fd-9b8e-4dcb-9aca-16ad3a1d338f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Status is Created\", function() {",
+									"    pm.response.to.have.status(\"Created\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "114bcc8a-874e-46bb-8146-c0c752f6fca9",
+								"exec": [
+									"const dateNow= new Date();",
+									"let stringDate= dateNow.toISOString();",
+									"let concatString = '\\xa0\\xa0\\xa0'+pm.globals.get(\"CategoryNameUnique\")+stringDate;",
+									"pm.globals.set(\"CategoryNameUnique\", concatString);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \n  \"name\":\"{{CategoryNameUnique}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get equipment list no. about successful post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"",
+									"pm.test(\"triming worked\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.totalElements;",
+									"    var name=jsonData.items[0].name;",
+									"    var indexOfSpace=name.indexOf(\"^\\s\");",
+									"    ",
+									"    pm.expect(totalRecord).to.be.above(0);",
+									"    pm.expect(indexOfSpace).to.equal(-1);",
+									"    pm.globals.set(\"NoOfCategoryFound\", totalRecord);",
+									"}); ",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+								"exec": [
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Fiix-Tenant-Id",
+								"value": "20",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2nd duplicate  post request without space in front",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "cc1489fd-9b8e-4dcb-9aca-16ad3a1d338f",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Status : must be unique\", function() {",
+									"    pm.expect(pm.response.text()).to.include(\"must be unique\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "01ccc3d0-23fb-4656-80b0-e1c204002a24",
+								"exec": [
+									"let concatString = pm.globals.get(\"CategoryNameUnique\").trim();",
+									"pm.globals.set(\"CategoryNameUnique\", concatString);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \n  \"name\":\"{{CategoryNameUnique}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2nd get equipment list status check single code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88a272e9-c888-415c-88da-2dbf69c2994f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is OK\", function() {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									"",
+									"pm.test(\"total no. of search result has not increased since last post\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var totalRecord=jsonData.items.length;",
+									"    pm.expect(totalRecord).to.eq(pm.globals.get(\"NoOfCategoryFound\"));",
+									"}); ",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "01825cab-9ba9-41d1-ac2e-0fbae1b7d28d",
+								"exec": [
+									"pm.globals.set(\"pageNumberE\", \"1\");",
+									"pm.globals.set(\"pageSizeE\", \"1000\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Fiix-Tenant-Id",
+								"value": "20",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://equipment-mgmt-service.fiixcmms-ball.com/equipment-categories?q={{CategoryNameUnique}}",
+							"protocol": "https",
+							"host": [
+								"equipment-mgmt-service",
+								"fiixcmms-ball",
+								"com"
+							],
+							"path": [
+								"equipment-categories"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{CategoryNameUnique}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e6499498-a440-446d-9083-8bd106fd9f3a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2ed3175e-5b7c-4e93-997b-107514c447ba",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e3c678a9-38b1-40a7-b95b-b04eb2208c91",
+			"key": "pageSize",
+			"value": "20",
+			"type": "string"
+		},
+		{
+			"id": "39068cc3-23c3-499b-ab52-218584de4650",
+			"key": "pageNumber",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"id": "3a93c5fd-717b-4713-a4d7-92784689e6b1",
+			"key": "soryBy",
+			"value": "name",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
